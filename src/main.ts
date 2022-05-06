@@ -2,13 +2,12 @@ import {
   oak,
   bold,
   brightGreen,
-  Marked,
   envConfig,
   oakAdapter,
   viewEngine,
   dejsEngine,
-} from '../deps.ts';
-import staticMiddlware from './middleware/static.middleware.ts';
+} from "../deps.ts";
+import staticMiddlware from "./middlewares/static.middleware.ts";
 
 envConfig({ export: true });
 
@@ -17,27 +16,28 @@ const router = new oak.Router();
 
 app.use(
   viewEngine(oakAdapter, dejsEngine, {
-    viewRoot: './views',
+    viewRoot: "./views",
   })
 );
 
-router.get('/', (ctx) => {
-  ctx.render('index.ejs', { name: 'DENO!' });
+// app.use(async (ctx, next) => {
+//   console.log(ctx.request.headers);
+//   console.log(ctx.request.ip);
+//   console.log(ctx.request.ips);
+//   console.log(ctx.request.method);
+//   console.log(ctx.request.url);
+//   await next();
+// });
+
+router.get("/", (ctx) => {
+  ctx.render("index.ejs", { name: "DENO!" });
 });
 
 app.use(router.allowedMethods()).use(router.routes());
 
-app.use(staticMiddlware('public'));
+app.use(staticMiddlware("public"));
 
 console.log(
-  bold(brightGreen(`Server running on port ${Deno.env.get('PORT')}`))
+  bold(brightGreen(`Server running on port ${Deno.env.get("PORT")}`))
 );
-await app.listen({ port: parseInt(<string>Deno.env.get('PORT')) });
-
-// const decoder = new TextDecoder('utf-8');
-// const markdown = decoder.decode(
-//   await Deno.readFile('./markdown/4-9-22.markdown')
-// );
-// const markup = Marked.parse(markdown);
-// console.log(markup.content);
-// console.log(markup.meta);
+await app.listen({ port: parseInt(<string>Deno.env.get("PORT")) });
