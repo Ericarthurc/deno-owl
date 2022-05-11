@@ -8,6 +8,7 @@ import {
   dejsEngine,
 } from "../deps.ts";
 import staticMiddlware from "./middlewares/static.middleware.ts";
+import { getBlogMetaArray, getBlogPost } from "./utilities/parser.utility.ts";
 
 envConfig({ export: true });
 
@@ -20,17 +21,10 @@ app.use(
   })
 );
 
-// app.use(async (ctx, next) => {
-//   console.log(ctx.request.headers);
-//   console.log(ctx.request.ip);
-//   console.log(ctx.request.ips);
-//   console.log(ctx.request.method);
-//   console.log(ctx.request.url);
-//   await next();
-// });
-
-router.get("/", (ctx) => {
-  ctx.render("index.ejs", { name: "DENO!" });
+// TESTING
+router.get("/", async (ctx) => {
+  const blogObj = await getBlogPost("4-19-22");
+  ctx.render("index.ejs", blogObj);
 });
 
 app.use(router.allowedMethods()).use(router.routes());

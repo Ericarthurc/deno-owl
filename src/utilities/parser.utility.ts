@@ -9,6 +9,7 @@ const parseMarkdown = async (filename: string): Promise<Parsed> => {
 };
 
 interface Meta {
+  filename: string;
   title: string;
   date: string;
   tags: string[];
@@ -19,13 +20,18 @@ export const getBlogMetaArray = async (): Promise<Meta[]> => {
   const metaArray: Meta[] = [];
 
   for await (const dirEntry of Deno.readDir("./markdown")) {
-    console.log(dirEntry.name);
-
-    metaArray.push((await parseMarkdown(dirEntry.name)).meta as Meta);
+    const data = (await parseMarkdown(dirEntry.name)).meta as Meta;
+    data.filename = dirEntry.name.split(".markdown")[0];
+    metaArray.push(data);
   }
 
   return metaArray;
 };
 
-// specific file get markdown and meta for /blog/:id
-// return object of { markdown, meta }
+export const getBlogPost = async (
+  filename: string
+): Promise<{ blogPost: string; blogMeta: Meta }> => {
+  const parsed = await parseMarkdown(filename + ".markdown");
+
+  return { blogPost: parsed.content, blogMeta: parsed.meta as Meta };
+};
