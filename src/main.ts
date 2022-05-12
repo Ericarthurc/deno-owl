@@ -6,14 +6,12 @@ import {
   oakAdapter,
   viewEngine,
   dejsEngine,
-} from "../deps.ts";
+} from "./deps.ts";
 import staticMiddlware from "./middlewares/static.middleware.ts";
-import { getBlogMetaArray, getBlogPost } from "./utilities/parser.utility.ts";
 
 envConfig({ export: true });
 
 const app = new oak.Application();
-const router = new oak.Router();
 
 app.use(
   viewEngine(oakAdapter, dejsEngine, {
@@ -21,13 +19,7 @@ app.use(
   })
 );
 
-// TESTING
-router.get("/", async (ctx) => {
-  const blogObj = await getBlogPost("4-19-22");
-  ctx.render("index.ejs", blogObj);
-});
-
-app.use(router.allowedMethods()).use(router.routes());
+// app.use(router.allowedMethods()).use(router.routes());
 
 app.use(staticMiddlware("public"));
 

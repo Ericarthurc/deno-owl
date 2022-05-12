@@ -1,4 +1,4 @@
-import { oak } from '../../deps.ts';
+import { oak } from "../deps.ts";
 
 // Allows the path to be set
 // export default (staticFolder: string, rootPath: string) => {
