@@ -1,3 +1,9 @@
-import { oakHandlerType } from "../types.ts";
+import { oakHandler } from "../types.ts";
 
-export const getBlogPosts: oakHandlerType = async (ctx, next) => {};
+export const getBlogList: oakHandler<"/"> = async (ctx) => {
+  ctx.response.body = "index";
+};
+
+export const getBlogById: oakHandler<"/:id"> = async (ctx) => {
+  ctx.response.body = ctx.params.id;
+};

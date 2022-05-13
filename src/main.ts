@@ -8,6 +8,7 @@ import {
   dejsEngine,
 } from "./deps.ts";
 import staticMiddlware from "./middlewares/static.middleware.ts";
+import blogRouter from "./routes/blog.router.ts";
 
 envConfig({ export: true });
 
@@ -19,7 +20,7 @@ app.use(
   })
 );
 
-// app.use(router.allowedMethods()).use(router.routes());
+app.use(blogRouter.allowedMethods()).use(blogRouter.routes());
 
 app.use(staticMiddlware("public"));
 
