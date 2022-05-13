@@ -25,6 +25,6 @@ app.use(blogRouter.allowedMethods()).use(blogRouter.routes());
 app.use(staticMiddlware("public"));
 
 app.addEventListener("listen", ({ port }) => {
-  console.log(`Server running on port: ${port}`);
+  console.log(bold(brightGreen(`Server running on port: ${port}`)));
 });
 await app.listen({ port: parseInt(<string>Deno.env.get("PORT")) });
