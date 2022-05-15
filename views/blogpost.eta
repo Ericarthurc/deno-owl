@@ -1,0 +1,14 @@
+<% layout("./layouts/main", {conditional: `
+<link rel="stylesheet" href="/styles/markdown.css" />
+<script src="/js/highlight.min.js"></script>
+`, titleExtension: `- ${it.blogData.blogMeta.title}`}) %>
+
+<div class="blog-container">
+  <%~ it.blogData.blogContent %>
+  <p class="tags">
+    Tags: <% for( tag of it.blogData.blogMeta.tags ) { %> <%= tag %> <% } %>
+  </p>
+</div>
+<script>
+  hljs.highlightAll();
+</script>

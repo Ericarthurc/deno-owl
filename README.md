@@ -4,4 +4,4 @@
 
 #### Please feel free to dive through this code to help with your projects
 
-##### Version: `0.5.0` [non production]
+##### Version: `0.6.0` [non production]

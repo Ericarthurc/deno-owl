@@ -7,6 +7,14 @@ Addition of markdown posts will not be versioned or require a changelog update.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2022-5-15
+
+### Changed
+
+- moved from `ejs` to early `eta` support; allowd for layouts and faster parsing
+- `parser.ulility.ts` | moved initialization of `Meta.filename` to the parser function and out of the handler helper functions
+- `parser.ulility.ts` | moved file reading out of each parser and into its own function that returns the files content as a string; this limits calls to the file system
+
 ## [0.5.0] - 2022-5-14
 
 ### Added

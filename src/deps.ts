@@ -6,5 +6,6 @@ export * as oak from "https://deno.land/x/oak@v10.5.1/mod.ts";
 export {
   oakAdapter,
   viewEngine,
-  dejsEngine,
+  etaEngine,
 } from "https://deno.land/x/view_engine@v10.5.1c/mod.ts";
+export * as eta from "https://deno.land/x/eta@v1.12.3/mod.ts";

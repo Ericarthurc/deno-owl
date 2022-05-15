@@ -1,21 +1,26 @@
 import {
   oak,
+  eta,
   bold,
   brightGreen,
   envConfig,
   oakAdapter,
   viewEngine,
-  dejsEngine,
+  etaEngine,
 } from "./deps.ts";
 import staticMiddlware from "./middlewares/static.middleware.ts";
 import blogRouter from "./routes/blog.router.ts";
 
 envConfig({ export: true });
 
+eta.configure({
+  views: `${Deno.cwd()}/views/`,
+});
+
 const app = new oak.Application();
 
 app.use(
-  viewEngine(oakAdapter, dejsEngine, {
+  viewEngine(oakAdapter, etaEngine, {
     viewRoot: "./views",
   })
 );

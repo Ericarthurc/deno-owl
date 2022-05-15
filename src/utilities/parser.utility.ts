@@ -1,28 +1,34 @@
 import { Marked } from "../deps.ts";
 
 interface Meta {
-  filename: string;
+  fileName: string;
   title: string;
   date: string;
   tags: string[];
   series: string;
 }
 
-const parseMeta = async (filename: string): Promise<Meta> => {
+const parseFile = async (
+  fileName: string
+): Promise<{ fileString: string; fileName: string }> => {
   const decoder = new TextDecoder("utf-8");
-  const markdown = decoder.decode(
-    await Deno.readFile(`./markdown/${filename}`)
+  const fileString = decoder.decode(
+    await Deno.readFile(`./markdown/${fileName}`)
   );
 
+  return { fileString, fileName };
+};
+
+const parseMeta = (fileString: string, fileName: string): Meta => {
   const metaObj: Meta = {
-    filename: "",
+    fileName: "",
     title: "",
     date: "",
     tags: [],
     series: "",
   };
 
-  const lines = markdown.split("---")[1].split("\n");
+  const lines = fileString.split("---")[1].split("\n");
   lines.forEach((line) => {
     switch (line.split(":")[0]) {
       case "title":
@@ -44,23 +50,21 @@ const parseMeta = async (filename: string): Promise<Meta> => {
     }
   });
 
+  metaObj.fileName = fileName.split(".markdown")[0];
+
   return metaObj;
 };
 
-const parseMarkdown = async (filename: string): Promise<string> => {
-  const decoder = new TextDecoder("utf-8");
-  const markdown = decoder.decode(
-    await Deno.readFile(`./markdown/${filename}`)
-  );
-  return Marked.parse(markdown).content;
+const parseMarkdown = (fileString: string): string => {
+  return Marked.parse(fileString).content;
 };
 
 export const getBlogMetaList = async (): Promise<Meta[]> => {
   const metaArray: Meta[] = [];
 
   for await (const dirEntry of Deno.readDir("./markdown")) {
-    const meta = await parseMeta(dirEntry.name);
-    meta.filename = dirEntry.name.split(".markdown")[0];
+    const fileData = await parseFile(dirEntry.name);
+    const meta = parseMeta(fileData.fileString, fileData.fileName);
     metaArray.push(meta);
   }
 
@@ -68,10 +72,11 @@ export const getBlogMetaList = async (): Promise<Meta[]> => {
 };
 
 export const getBlogPost = async (
-  filename: string
+  fileName: string
 ): Promise<{ blogContent: string; blogMeta: Meta }> => {
-  const content = await parseMarkdown(filename + ".markdown");
-  const meta = await parseMeta(filename + ".markdown");
+  const fileData = await parseFile(fileName + ".markdown");
+  const content = parseMarkdown(fileData.fileString);
+  const meta = parseMeta(fileData.fileString, fileData.fileName);
 
   return { blogContent: content, blogMeta: meta };
 };
