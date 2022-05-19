@@ -11,19 +11,28 @@ import {
 import staticMiddlware from "./middlewares/static.middleware.ts";
 import blogRouter from "./routes/blog.router.ts";
 
+export interface MyState {
+  id: number;
+}
+
 envConfig({ export: true });
 
 eta.configure({
   views: `${Deno.cwd()}/views/`,
 });
 
-const app = new oak.Application();
+const app = new oak.Application<MyState>();
 
 app.use(
   viewEngine(oakAdapter, etaEngine, {
     viewRoot: "./views",
   })
 );
+
+app.use(async (ctx, next) => {
+  ctx.state.id = 6;
+  await next();
+});
 
 app.use(blogRouter.allowedMethods()).use(blogRouter.routes());
 
