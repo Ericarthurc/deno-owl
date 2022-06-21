@@ -1,4 +1,7 @@
-import { Marked } from "../deps.ts";
+import { Marked } from '../deps.ts';
+
+const BLOGEXTENSION = 'md';
+const BLOGDIR = 'blogPosts';
 
 interface Meta {
   fileName: string;
@@ -11,9 +14,9 @@ interface Meta {
 const parseFile = async (
   fileName: string
 ): Promise<{ fileString: string; fileName: string }> => {
-  const decoder = new TextDecoder("utf-8");
+  const decoder = new TextDecoder('utf-8');
   const fileString = decoder.decode(
-    await Deno.readFile(`./markdown/${fileName}`)
+    await Deno.readFile(`./${BLOGDIR}/${fileName}`)
   );
 
   return { fileString, fileName };
@@ -21,36 +24,36 @@ const parseFile = async (
 
 const parseMeta = (fileString: string, fileName: string): Meta => {
   const metaObj: Meta = {
-    fileName: "",
-    title: "",
-    date: "",
+    fileName: '',
+    title: '',
+    date: '',
     tags: [],
-    series: "",
+    series: '',
   };
 
-  const lines = fileString.split("---")[1].split("\n");
+  const lines = fileString.split('---')[1].split('\n');
   lines.forEach((line) => {
-    switch (line.split(":")[0]) {
-      case "title":
-        metaObj.title = line.split(":")[1].trim();
+    switch (line.split(':')[0]) {
+      case 'title':
+        metaObj.title = line.split(':')[1].trim();
         break;
-      case "date":
-        metaObj.date = line.split(":")[1].trim();
+      case 'date':
+        metaObj.date = line.split(':')[1].trim();
         break;
-      case "tags":
+      case 'tags':
         metaObj.tags = line
-          .split(":")[1]
+          .split(':')[1]
           .trim()
-          .split(",")
+          .split(',')
           .map((x) => x.trim());
         break;
-      case "series":
-        metaObj.series = line.split(":")[1].trim();
+      case 'series':
+        metaObj.series = line.split(':')[1].trim();
         break;
     }
   });
 
-  metaObj.fileName = fileName.split(".markdown")[0];
+  metaObj.fileName = fileName.split(`.${BLOGEXTENSION}`)[0];
 
   return metaObj;
 };
@@ -62,7 +65,7 @@ const parseMarkdown = (fileString: string): string => {
 export const getBlogMetaList = async (): Promise<Meta[]> => {
   const metaArray: Meta[] = [];
 
-  for await (const dirEntry of Deno.readDir("./markdown")) {
+  for await (const dirEntry of Deno.readDir(`./${BLOGDIR}`)) {
     const fileData = await parseFile(dirEntry.name);
     const meta = parseMeta(fileData.fileString, fileData.fileName);
     metaArray.push(meta);
@@ -74,7 +77,7 @@ export const getBlogMetaList = async (): Promise<Meta[]> => {
 export const getBlogPost = async (
   fileName: string
 ): Promise<{ blogContent: string; blogMeta: Meta }> => {
-  const fileData = await parseFile(fileName + ".markdown");
+  const fileData = await parseFile(fileName + `.${BLOGEXTENSION}`);
   const content = parseMarkdown(fileData.fileString);
   const meta = parseMeta(fileData.fileString, fileData.fileName);
 

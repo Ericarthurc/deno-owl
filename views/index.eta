@@ -1,4 +1,4 @@
-<% layout("./layouts/main", {conditional: "", titleExtension: ""}) %>
+<% layout("./layouts/main", {conditional: "" , titleExtension: "" }) %>
 
 <div class="main-container">
   <div class="index-list">
@@ -6,14 +6,14 @@
     <div class="main_blog-post">
       <a class="list-anchor" href="/blog/<%= blog.fileName %>">
         <div class="list-anchor__info">
-          <span class="info-title"><%= blog.title %></span>
-          <span class="info-date"><%= blog.date %></span>
+          <span class="info-title"> <%= blog.title %> </span>
+          <span class="info-date"> <%= blog.date %> </span>
         </div>
       </a>
       <div class="info-tags">
         <% for (const tag of blog.tags) { %>
         <a class="info-tag-anchor" href="/category/<%= tag %>">
-          <span class="info-tag-span"><%= tag %></span>
+          <span class="info-tag-span"> <%= tag %> </span>
         </a>
         <% } %>
       </div>

@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/styles/main.css" />
     <%~ it.conditional %>
   </head>
+
   <body>
     <%~ includeFile('../partials/navbar'); %> <%~ it.body %>
   </body>
